@@ -19,12 +19,11 @@
           <tbody>
             <tr v-for="(baseCurrency, i) in currencies">
               <th class="thead">{{ baseCurrency }}</th>
-              <td v-for="(quoteCurrency, j) in currencies">{{ tickers[i][j] == undefined ? '-' : tickers[i][j] }}</td>
+              <td v-for="(quoteCurrency, j) in currencies">{{ tickers[j][i] == undefined ? '-' : tickers[j][i] }}</td>
             </tr>
           </tbody>
-
-
         </table>
+        <p>Last update: {{ lastUpdateTimestamp }}</p>
       </div>
     </section>
   </div>
@@ -37,7 +36,8 @@ export default {
     return {
       currencies: [],
       tickers: [],
-      loading: true
+      loading: true,
+      lastUpdateTimestamp: 0
     }
   },
 
@@ -64,10 +64,17 @@ export default {
         const pair = market.split('/')
         const base = pair[0]
         const quote = pair[1]
-        promises.push(this.$http.get(`https://www.bitstamp.net/api/v2/ticker_hour/${market.split('/').map(m => m.toLowerCase()).join('')}/`).then(response => {
+        const urlSymbol = pair.map(m => m.toLowerCase()).join('')
+        // use hourly ticker to bypass missing CORS headers
+        promises.push(this.$http.get(`https://www.bitstamp.net/api/v2/ticker_hour/${urlSymbol}/`).then(response => {
           const i = this.currencies.indexOf(quote)
           const j = this.currencies.indexOf(base)
           this.setTicker(i, j, response.data.last)
+
+          this.$ws.subscribe(`live_trades_${urlSymbol}`).bind('trade', data => {
+            this.lastUpdateTimestamp = data.timestamp
+            this.setTicker(i, j, data.price)
+          })
         }))
       }
 
@@ -79,8 +86,8 @@ export default {
 
   methods: {
     setTicker(i, j, value) {
-      this.tickers[i][j] = Math.round(10000 * value) / 10000
-      this.tickers[j][i] = Math.round(10000 / value) / 10000
+      this.tickers[i][j] = value
+      this.tickers[j][i] = Math.round(1000000 / value) / 1000000
     }
   }
 }
