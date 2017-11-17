@@ -8,6 +8,12 @@ module.exports = {
     publicPath: '/dist/',
     filename: 'build.js'
   },
+  // required to prevent "module not found" errors
+  node: {
+    fs: "empty",
+    net: 'empty',
+    tls: 'empty'
+  },
   module: {
     rules: [
       {
