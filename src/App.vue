@@ -1,21 +1,31 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+    <section class="section">
+      <div class="container">
+        <h1 class="title">Bitstamp Matrix</h1>
+        <p class="subtitle">
+          Realtime Bitstamp (crypto)currencies pairs quotes!
+        </p>
+      </div>
+      <div class="container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th><abbr title="Base">B</abbr> \ <abbr title="Quote">Q</abbr></th>
+              <th v-for="quoteCurrency in currencies">{{ quoteCurrency }}</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr v-for="baseCurrency in currencies">
+              <th class="thead">{{ baseCurrency }}</th>
+              <td v-for="quoteCurrency in currencies">{{ baseCurrency == quoteCurrency ? '-' : '12.3546' }}</td>
+            </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -24,37 +34,16 @@ export default {
   name: 'app',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      currencies: [
+        'BTC', 'LTC', 'ETH', 'XRP', 'USD', 'EUR'
+      ]
     }
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
+  th, td {
+    text-align: center !important;
+  }
 </style>
