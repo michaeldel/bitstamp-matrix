@@ -16,9 +16,9 @@
           </tr>
           </thead>
           <tbody>
-            <tr v-for="baseCurrency in currencies">
+            <tr v-for="(baseCurrency, i) in currencies">
               <th class="thead">{{ baseCurrency }}</th>
-              <td v-for="quoteCurrency in currencies">{{ baseCurrency == quoteCurrency ? '-' : '12.3546' }}</td>
+              <td v-for="(quoteCurrency, j) in currencies">{{ baseCurrency === quoteCurrency ? '-' : tickers[i][j] }}</td>
             </tr>
           </tbody>
 
@@ -34,9 +34,29 @@ export default {
   name: 'app',
   data () {
     return {
-      currencies: [
-        'BTC', 'LTC', 'ETH', 'XRP', 'USD', 'EUR'
-      ]
+      currencies: ['BTC', 'LTC', 'ETH', 'XRP', 'USD', 'EUR'],
+      tickers: []
+    }
+  },
+
+  beforeMount() {
+    for (let i in this.currencies) {
+      this.tickers.push([])
+      for (let _ in this.currencies)
+        this.tickers[i].push(0)
+    }
+
+    for (let i = 0; i < this.currencies.length; i++)
+      for (let j = i + 1; j < this.currencies.length; j++) {
+        this.setTicker(i, j, 20 * Math.random())
+
+      }
+  },
+
+  methods: {
+    setTicker(i, j, value) {
+      this.tickers[i][j] = Math.round(10000 * value) / 10000
+      this.tickers[j][i] = Math.round(10000 / value) / 10000
     }
   }
 }
