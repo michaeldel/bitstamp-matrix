@@ -18,7 +18,7 @@
           <tbody>
             <tr v-for="(baseCurrency, i) in currencies">
               <th class="thead">{{ baseCurrency }}</th>
-              <td v-for="(quoteCurrency, j) in currencies">{{ baseCurrency === quoteCurrency ? '-' : tickers[i][j] }}</td>
+              <td v-for="(quoteCurrency, j) in currencies">{{ tickers[i][j] == undefined ? '-' : tickers[i][j] }}</td>
             </tr>
           </tbody>
 
@@ -43,14 +43,12 @@ export default {
     for (let i in this.currencies) {
       this.tickers.push([])
       for (let _ in this.currencies)
-        this.tickers[i].push(0)
+        this.tickers[i].push(undefined)
     }
 
     for (let i = 0; i < this.currencies.length; i++)
-      for (let j = i + 1; j < this.currencies.length; j++) {
+      for (let j = i + 1; j < this.currencies.length; j++)
         this.setTicker(i, j, 20 * Math.random())
-
-      }
   },
 
   methods: {
