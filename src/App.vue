@@ -94,6 +94,16 @@ export default {
 </script>
 
 <style>
+  html {
+    background-image: linear-gradient(to right, #15A14A 0%, #6DA14A 100%)
+  }
+
+  .section {
+    background-color: white;
+    border-radius: 0.5em;
+    margin: 2em;
+  }
+
   th, td {
     text-align: center !important;
   }
