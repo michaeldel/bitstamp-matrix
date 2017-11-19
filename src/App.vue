@@ -71,7 +71,9 @@ export default {
           const j = this.currencies.indexOf(base)
           this.setTicker(i, j, response.data.last)
 
-          this.$ws.subscribe(`live_trades_${urlSymbol}`).bind('trade', data => {
+          // handle specific case for BTC/USD
+          const subscription = market === 'BTC/USD' ? 'live_trades' : `live_trades_${urlSymbol}`
+          this.$ws.subscribe(subscription).bind('trade', data => {
             this.lastUpdateTimestamp = data.timestamp
             this.setTicker(i, j, data.price)
           })
